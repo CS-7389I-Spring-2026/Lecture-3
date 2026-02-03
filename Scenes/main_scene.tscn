@@ -1,5 +1,9 @@
 [gd_scene format=3 uid="uid://bcs0sp2n0wij1"]
 
+[ext_resource type="Script" uid="uid://w27nrj58jugj" path="res://scripts/xr_starter.gd" id="1_6l7je"]
+[ext_resource type="Script" uid="uid://cftcof507ms5x" path="res://scripts/box_animator.gd" id="1_52fb6"]
+[ext_resource type="PackedScene" uid="uid://l2n30mpbkdyw" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/right_hand_low.tscn" id="3_jv6wh"]
+
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_2ia5b"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
 ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -12,7 +16,13 @@ background_mode = 2
 sky = SubResource("Sky_52fb6")
 tonemap_mode = 2
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6l7je"]
+albedo_color = Color(0.057816267, 0.38289875, 0.33598188, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_6l7je"]
+
 [node name="Node3D" type="Node3D" unique_id=772790983]
+script = ExtResource("1_6l7je")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=2138352099]
 transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
@@ -22,9 +32,25 @@ shadow_enabled = true
 environment = SubResource("Environment_6l7je")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=802773819]
+script = ExtResource("1_52fb6")
 
 [node name="CSGSphere3D" type="CSGSphere3D" parent="." unique_id=59688712]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0042365, 0)
+transform = Transform3D(0.1481719, 0, -0.98896164, 0, 1, 0, 0.98896164, 0, 0.1481719, 0, 1.0042365, 0)
+material = SubResource("StandardMaterial3D_6l7je")
 
-[node name="Camera3D" type="Camera3D" parent="." unique_id=835024719]
-transform = Transform3D(0.9961947, 0.028375132, -0.08240736, 0, 0.94551855, 0.32556814, 0.08715574, -0.32432926, 0.9419206, 0, 1.355, 2.315)
+[node name="XROrigin3D" type="XROrigin3D" parent="." unique_id=18981377]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.0041912)
+
+[node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D" unique_id=604695785]
+
+[node name="LeftHand" type="XRController3D" parent="XROrigin3D" unique_id=1657162761]
+tracker = &"left_hand"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="XROrigin3D/LeftHand" unique_id=999787166]
+transform = Transform3D(0.1, 0, 0, 0, -4.371139e-09, -0.1, 0, 0.1, -4.371139e-09, 0, 0, 0)
+mesh = SubResource("CapsuleMesh_6l7je")
+
+[node name="RightHand" type="XRController3D" parent="XROrigin3D" unique_id=593122231]
+tracker = &"right_hand"
+
+[node name="RightHand" parent="XROrigin3D/RightHand" unique_id=517997137 instance=ExtResource("3_jv6wh")]
